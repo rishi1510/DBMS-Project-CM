@@ -29,6 +29,7 @@
     <div class="frm">
     <h2>Registered successfully</h2><br><br>
     <a href="clog.php" style="float: right" class="btn">Login</a>
+</div>
 
 
 </body>
