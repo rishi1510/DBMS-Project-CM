@@ -32,7 +32,4 @@
 
 
 </body>
-<<<<<<< HEAD
 </html>
-=======
->>>>>>> 7b09df9d14aef81b28047ba36bbc4a7bc283c5aa
