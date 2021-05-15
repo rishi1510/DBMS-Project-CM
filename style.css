@@ -17,6 +17,12 @@
   margin-left: 10%;
 }
 
+#send {
+  width:60%;
+  margin-top: 50px;
+  margin-left: 5%;
+}
+
 .btn{
     color: #fff;
     background-color: green;
@@ -28,7 +34,19 @@
     display: inline;
 }
 
-.btn:hover{
+.btn2{
+  color: #fff;
+  background-color: green;
+  border: solid green;
+  padding: 7px;
+  margin-left: 75%;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline;
+  font-size: 20px;
+}
+
+.btn:hover, .btn2:hover{
     opacity: 0.9;
     transition: all 0.3s;
 }

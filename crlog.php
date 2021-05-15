@@ -27,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($count == 1) {
         $_SESSION['use'] = $user;
-        echo '<script type="text/javascript"> window.open("crlog.php","_self");</script>';
+        echo '<script type="text/javascript"> window.open("crhome.php","_self");</script>';
         exit;
     }
     else {

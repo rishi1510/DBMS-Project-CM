@@ -18,7 +18,7 @@
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['CS_NAME'];
 
-    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user'";
+    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user' ORDER BY D_DATE";
     $result2 = mysqli_query($con, $sql2);
     $count1 = mysqli_num_rows($result2);
 

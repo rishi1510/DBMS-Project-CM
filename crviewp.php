@@ -6,7 +6,7 @@
 
         <script>
            function goBack() {
-                window.open("chome.php","_self");
+                window.open("crhome.php","_self");
             }
         </script>
     </head>
@@ -19,12 +19,27 @@
     }
     $user = $_SESSION['use'];
 
-    $sql1 = "SELECT CS_NAME FROM CUSTOMER WHERE CS_CODE='$user'";
+    $sql1 = "SELECT C_NAME FROM COURIER WHERE C_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
-    $name = $row1['CS_NAME'];
-
+    $name = $row1['C_NAME'];
     $code = $_GET['pid'];
+    $sub = 0;
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $sqlu = "UPDATE PACKAGE SET STATUS = 'Delivered', D_DATE = CURRENT_DATE WHERE P_CODE = '$code'";
+        if(!mysqli_query($con, $sqlu)) { 
+            echo "Error: " . $sqlu . "<br>" . mysqli_error($con);
+        }
+        else {
+            $sqldp = "UPDATE COURIER SET P_COUNT = P_COUNT - 1 WHERE C_CODE = '$user'";
+            if(!mysqli_query($con, $sqldp)) { 
+                echo "Error: " . $sqldp . "<br>" . mysqli_error($con);
+            }
+        }
+        $sub = 1;
+    }
+
     $sql = "SELECT * FROM PACKAGE WHERE P_CODE = '$code'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -44,13 +59,18 @@
           <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
-            <a href="chome.php" style="color: grey">Track Packages</a>
-            <a href="cpack.php">Send Package</a>
+            <a href="crhome.php" style="color: grey">View Packages</a>
             <a href="#">Your Account</a>
-            <a href="#">Contact Us </a>
         </div>
         <div class="d2">
-        Package details:<br><br>
+        Package details:
+        <?php
+        if(($sub == 0) && (strcmp($row['STATUS'], 'Delivered') != 0)) {
+            echo '<form method="POST">';
+            echo '<input type="submit" class="btn2" value="Mark As Delivered"/>';
+            echo '</form>';
+        }
+        ?>
           <div class="d3">
               <table class="table2" cellspacing="20px">
               <tr>
@@ -86,26 +106,12 @@
               <td><?php echo $row['P_WEIGHT'];?> kg</td>
               </tr>
               <tr>
-              <th>Amount:</th>
-              <td>Rs <?php echo $row['P_COST'];?></td>
-              </tr>
-              <tr>
-              <th>Delivery Date:</th>
-              <td><?php 
-              $date = "  -  ";
-              if($row['C_CODE']) {
-                  $date = date('d-m-Y', strtotime($row['D_DATE']));
-              }
-              echo $date;
-              ?></td>
+              <th>Status:</th>
+              <td><?php echo $row['STATUS'];?></td>
               </tr>
               <tr>
               <th>Comments:</th>
               <td><?php echo $row['COMMENTS'];?></td>
-              </tr>
-              <tr>
-              <th>Status:</th>
-              <td><?php echo $row['STATUS'];?></td>
               </tr>
               </table>
               </div>

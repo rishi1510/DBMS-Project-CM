@@ -20,6 +20,7 @@
     $userMail = $row1['CS_EMAIL'];
     $tname = "";
     $email = "";
+    $phone = "";
     $address = "";
     $city ="";
     $pin = "";
@@ -33,6 +34,7 @@
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $tname = $_POST['tname'];
         $email = $_POST['email'];
+        $phone = $_POST['phone'];
         $address = $_POST['address'];
         $city = $_POST['branch'];
         $pin = $_POST['pin'];
@@ -63,13 +65,16 @@
         else if(preg_match($nameVal, $tname) == 0) {
             $err1 = "Enter valid name";
         }
+        else if(preg_match('/[0-9]{10}/', $phone) == 0) {
+            $err1 = "Enter valid phone number";
+        }
 
         if(preg_match('/[0-9]{6}/', $pin) == 0) {
           $err2 = "Enter valid pin";
         }
 
         if(($emptyErr == "") && ($err1 == "") && ($err2 == "")) {
-          $data = array($tname, $email, $address, $city, $pin, $type, $weight, $comment, $rcode);
+          $data = array($tname, $email, $address, $city, $pin, $type, $weight, $comment, $rcode, $phone);
 
           $_SESSION['data'] = $data;
           header("Location: cpack2.php");
@@ -97,7 +102,7 @@
             <a href="#">Contact Us</a>
         </div>
         <br><br>
-        <div class="frm" id="signup">
+        <div class="frm" id="send">
           <h1>Send Package</h1>
           <form name="f1" id="spfrm" action="<?php
             echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" id="regfrm">
@@ -110,11 +115,14 @@
                 <td>
                   Email:<br>
                   <input type="email" name="email" maxlength="20" value="<?php echo $email; ?>" required></td>
+                <td>
+                  Phone:<br>
+                  <input type="text" name="phone" maxlength="10" value="<?php echo $phone; ?>" required></td>
                   <td>
                   <?php
                     echo "<div class='err'><br>";
                     echo $err1;
-                    echo "</div><br>";
+                    echo "</div>";
                     ?>
                 </td>
              </tr>

@@ -14,13 +14,12 @@ if(isset($_SESSION['use'])) {
 include('conn.php');
 $login = "";
 $email = "";
-$username="";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $pass = $_POST['pass'];
 
-    $sql = "SELECT M_CODE, M_USER, M_PASS FROM MANAGER WHERE M_USER='$username' AND M_PASS='$pass'";
+    $sql = "SELECT M_CODE, M_EMAIL, M_PASS FROM MANAGER WHERE M_EMAIL='$email' AND M_PASS='$pass'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $count = mysqli_num_rows($result);
@@ -28,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($count == 1) {
         $_SESSION['use'] = $user;
-        echo '<script type="text/javascript"> window.open("index.html","_self");</script>';
+        echo '<script type="text/javascript"> window.open("mhome.php","_self");</script>';
         exit;
     }
     else {
@@ -64,7 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1>Manager Login</h1>
     <form name="f1" action="<?php
     echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
-        Username:<br><input type="text" name="username" id="username" value="<?php echo $username;?>"/><br><br>
+        Email:<br><input type="email" name="email" id="email" value="<?php echo $email;?>"/><br><br>
         Password:<br><input type="password" name="pass" id="pass"/><br><br>
         <input type="submit" class="btn" name="Login" value="Login"/>
     </form>

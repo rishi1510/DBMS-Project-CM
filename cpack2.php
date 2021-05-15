@@ -33,10 +33,10 @@
         $pymt = $_POST['pymt'];
 
         if($data[8] == "") {
-            $sql = "INSERT INTO `PACKAGE` (`P_CODE`, `TO_NAME`, `TO_ADDRESS`, `TO_CITY`, `TO_PIN`, `P_CONTENTS`, `P_WEIGHT`, `P_COST`, `PYMT_STATUS`, `D_DATE`, `C_CODE`, `R_EMAIL`, `RC_CODE`, `CS_CODE`, `COMMENTS`, `STATUS`) VALUES (NULL, '$data[0]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$cost', '$pymt', '2029-12-31', NULL, '$data[1]', NULL, '$user', '$data[7]', 'Processing Request')";
+            $sql = "INSERT INTO `PACKAGE` (`P_CODE`, `TO_NAME`, `TO_ADDRESS`, `TO_CITY`, `TO_PIN`, `TO_PHONE`, `P_CONTENTS`, `P_WEIGHT`, `P_COST`, `PYMT_STATUS`, `D_DATE`, `C_CODE`, `R_EMAIL`, `RC_CODE`, `CS_CODE`, `COMMENTS`, `STATUS`) VALUES (NULL, '$data[0]', '$data[2]', '$data[3]', '$data[4]', '$data[9]', '$data[5]', '$data[6]', '$cost', '$pymt', '2029-12-31', NULL, '$data[1]', NULL, '$user', '$data[7]', 'Processing Request')";
         }
         else {
-            $sql = "INSERT INTO `PACKAGE` (`P_CODE`, `TO_NAME`, `TO_ADDRESS`, `TO_CITY`, `TO_PIN`, `P_CONTENTS`, `P_WEIGHT`, `P_COST`, `PYMT_STATUS`, `D_DATE`, `C_CODE`, `R_EMAIL`, `RC_CODE`, `CS_CODE`, `COMMENTS`, `STATUS`) VALUES (NULL, '$data[0]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$cost', '$pymt', '2029-12-31', NULL, '$data[1]', '$data[8]', '$user', '$data[7]', 'Processing Request')";
+            $sql = "INSERT INTO `PACKAGE` (`P_CODE`, `TO_NAME`, `TO_ADDRESS`, `TO_CITY`, `TO_PIN`, `TO_PHONE`, `P_CONTENTS`, `P_WEIGHT`, `P_COST`, `PYMT_STATUS`, `D_DATE`, `C_CODE`, `R_EMAIL`, `RC_CODE`, `CS_CODE`, `COMMENTS`, `STATUS`) VALUES (NULL, '$data[0]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[9]', '$data[6]', '$cost', '$pymt', '2029-12-31', NULL, '$data[1]', '$data[8]', '$user', '$data[7]', 'Processing Request')";
         }
         if(mysqli_query($con, $sql)) {
             header("Location: sendsuccess.php");
