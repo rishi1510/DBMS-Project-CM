@@ -9,7 +9,7 @@
     include('conn.php');
     session_start();
     if(!isset($_SESSION['use'])) {
-        header("Location: logout.php");
+        header("Location: logout.php?type=0");
     }
     $user = $_SESSION['use'];
 
@@ -89,11 +89,11 @@
             </button>
             <div class="dropdown-content">
               <a href="#">Update account details</a>
-              <a href="logout.php">Logout</a>
+              <a href="logout.php?type=0">Logout</a>
             </div>
           </div>
           <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
+          <a href="logout.php?type=0" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
             <a href="chome.php">Track Packages</a>

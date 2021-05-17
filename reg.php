@@ -7,7 +7,7 @@
     <?php 
     session_start();
     if(isset($_SESSION['use'])) {
-        header("Location: logout.php");
+        header("Location: logout.php?type=1");
     }
 
     include('conn.php');

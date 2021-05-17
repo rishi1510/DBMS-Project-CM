@@ -8,15 +8,20 @@
     <?php
     include('conn.php');
     session_start();
-    if(!isset($_SESSION['use'])) {
-        header("Location: logout.php");
+    if(!isset($_SESSION['cruse'])) {
+        header("Location: logout.php?type=1");
     }
-    $user = $_SESSION['use'];
+    $user = $_SESSION['cruse'];
 
-    $sql1 = "SELECT C_NAME FROM COURIER WHERE C_CODE='$user'";
+    $sql1 = "SELECT * FROM COURIER WHERE C_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['C_NAME'];
+    $pass = $row1['C_PASS'];
+
+    if(strcmp($pass, 'pass') == 0) {
+      header("Location: crsetpass.php");
+    }
 
     $sql2 = "SELECT * FROM PACKAGE WHERE C_CODE='$user' AND STATUS != 'Delivered'";
     $result2 = mysqli_query($con, $sql2);
@@ -33,11 +38,11 @@
             </button>
             <div class="dropdown-content">
               <a href="#">Update account details</a>
-              <a href="logout.php">Logout</a>
+              <a href="logout.php?type=1">Logout</a>
             </div>
           </div>
           <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
+          <a href="logout.php?type=1" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
             <a href="crhome.php" style="color: grey">View Packages</a>

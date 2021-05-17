@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 15, 2021 at 06:36 AM
+-- Generation Time: May 17, 2021 at 02:11 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.5
 
@@ -32,17 +32,18 @@ CREATE TABLE `BRANCH` (
   `B_NAME` varchar(30) DEFAULT NULL,
   `B_ADDRESS` varchar(100) NOT NULL,
   `B_CITY` varchar(30) DEFAULT NULL,
-  `B_PIN` int(6) NOT NULL
+  `B_PIN` int(6) NOT NULL,
+  `B_PHONE` char(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `BRANCH`
 --
 
-INSERT INTO `BRANCH` (`B_CODE`, `B_NAME`, `B_ADDRESS`, `B_CITY`, `B_PIN`) VALUES
-(1, 'Chennai Branch', 'New No:32,old No:43, K.b.dasan Rd, Teynampet', 'Chennai', 600028),
-(2, 'Mumbai Branch', '44 -g/, Majithia Nagar, S V Road, Kandivali', 'Mumbai', 400004),
-(3, 'Bangalore Branch', '42nd Cross, Khb Colony, 2nd Stage, Basaveshwara', 'Bangalore', 560001);
+INSERT INTO `BRANCH` (`B_CODE`, `B_NAME`, `B_ADDRESS`, `B_CITY`, `B_PIN`, `B_PHONE`) VALUES
+(1, 'Chennai Branch', 'New No:32,old No:43, K.b.dasan Rd, Teynampet', 'Chennai', 600028, '9328464275'),
+(2, 'Mumbai Branch', '44 -g/, Majithia Nagar, S V Road, Kandivali', 'Mumbai', 400004, '7893467324'),
+(3, 'Bangalore Branch', '42nd Cross, Khb Colony, 2nd Stage, Basaveshwara', 'Bangalore', 560001, '8463746321');
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,8 @@ CREATE TABLE `COURIER` (
 
 INSERT INTO `COURIER` (`C_CODE`, `C_NAME`, `C_PHONE`, `C_EMAIL`, `B_CODE`, `C_PASS`, `P_COUNT`) VALUES
 (1, 'Ajay', '9348748365', 'ajay@gmail.com', 1, 'Ajay1234', 0),
-(2, 'Raj', '8426754354', 'raj@gmail.com', 1, 'Rajesh1234', 1);
+(2, 'Raj', '8426754354', 'raj@gmail.com', 1, 'Rajesh1234', 0),
+(3, 'Bharat', '9526452657', 'bharat@gmail.com', 3, 'Bharat1234', 0);
 
 -- --------------------------------------------------------
 
@@ -160,10 +162,11 @@ CREATE TABLE `PACKAGE` (
 
 INSERT INTO `PACKAGE` (`P_CODE`, `TO_NAME`, `TO_ADDRESS`, `TO_CITY`, `TO_PIN`, `TO_PHONE`, `P_CONTENTS`, `P_WEIGHT`, `P_COST`, `PYMT_STATUS`, `D_DATE`, `C_CODE`, `R_EMAIL`, `RC_CODE`, `CS_CODE`, `COMMENTS`, `STATUS`) VALUES
 (1, 'Rahul', '47 /, Greams Road, T Nagar', 'Chennai', 600036, '8747564323', 'Parcel', 10, 500, 'Cash', '2021-05-14 13:09:49', 1, 'rahul@gmail.com', 2, 1, '', 'Delivered'),
-(2, 'Vignesh', '149, Eldams Rd, Teynampet\r\n', 'Chennai', 600012, '9832486472', 'Documents', 3, 200, 'Cash', '2021-05-19 00:00:00', 2, 'vig@gmail.com', 5, 1, '', 'Courier Assigned'),
+(2, 'Vignesh', '149, Eldams Rd, Teynampet\r\n', 'Chennai', 600012, '9832486472', 'Documents', 3, 200, 'Cash', '2021-05-16 00:00:00', 2, 'vig@gmail.com', 5, 1, '', 'Delivered'),
 (7, 'Rishi', '1, 4B, RM Towers', 'Chennai', 600028, '9463253424', 'Parcel', 10, 500, 'Credit Card', '2021-05-14 00:00:00', 1, 'rishi@gmail.com', 1, 2, '', 'Delivered'),
 (11, 'Ashwin', 'No 5, \r\nAnna Nagar', 'Chennai', 600038, '9832456324', 'Documents', 5, 250, 'Credit Card', '2021-05-14 00:00:00', 1, 'ash@gmail.com', 4, 1, '', 'Delivered'),
-(12, 'Sathwik', 'No 1, First street', 'Bangalore', 560012, '9834846372', 'Parcel', 10, 500, 'Cash', '2029-12-31 00:00:00', NULL, 'sathwik@gmail.com', NULL, 1, 'Handle with care', 'Processing Request');
+(12, 'Sathwik', 'No 1, First street', 'Bangalore', 560012, '9834846372', 'Parcel', 10, 500, 'Cash', '2021-05-16 00:00:00', 3, 'sathwik@gmail.com', NULL, 1, 'Handle with care', 'Delivered'),
+(13, 'Sathwik', 'No 1, first street', 'Chennai', 600067, '9435864736', 'Items', 10, 500, 'Cash', '2021-05-16 00:00:00', 1, 'sathwik@gmail.com', NULL, 2, '', 'Delivered');
 
 --
 -- Indexes for dumped tables
@@ -239,7 +242,7 @@ ALTER TABLE `MANAGER`
 -- AUTO_INCREMENT for table `PACKAGE`
 --
 ALTER TABLE `PACKAGE`
-  MODIFY `P_CODE` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `P_CODE` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables

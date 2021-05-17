@@ -14,15 +14,23 @@
     <?php
     include('conn.php');
     session_start();
-    if(!isset($_SESSION['use'])) {
-        header("Location: logout.php");
+    if(!isset($_SESSION['cruse'])) {
+        header("Location: logout.php?type=1");
     }
-    $user = $_SESSION['use'];
 
-    $sql1 = "SELECT CS_NAME FROM CUSTOMER WHERE CS_CODE='$user'";
+
+    
+    $user = $_SESSION['cruse'];
+
+    $sql1 = "SELECT * FROM CUSTOMER WHERE CS_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['CS_NAME'];
+    $pass = $row1['C_PASS'];
+
+    if(strcmp($pass, 'pass') == 0) {
+      header("Location: crsetpass.php");
+    }
 
     $code = $_GET['pid'];
     $sql = "SELECT * FROM PACKAGE WHERE P_CODE = '$code'";
@@ -42,12 +50,12 @@
             </button>
             <div class="dropdown-content">
               <a href="#">Update account details</a>
-              <a href="logout.php">Logout</a>
+              <a href="logout.php?type=1">Logout</a>
             </div>
           </div>
           <input type="button" class="navbtn" value="&#8592" onclick="goBack()"/>
           <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
+          <a href="logout.php?type=1" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
             <a href="chome.php" style="color: grey">Track Packages</a>

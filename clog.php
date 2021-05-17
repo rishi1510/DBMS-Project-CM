@@ -8,7 +8,7 @@
 <?php
 session_start();
 if(isset($_SESSION['use'])) {
-    header("Location: logout.php");
+    header("Location: logout.php?type=0");
 }
 
 include('conn.php');
@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="clog.php" style="color: grey">Customer Login</a>
             <a href="crlog.php">Courier Login</a>
             <a href="mlog.php">Manager Login</a>
-            <a href="#">Contact Us</a>
+            <a href="contact.php">Contact Us</a>
     </div>
     <div class="frm">
         <h1>Login</h1>

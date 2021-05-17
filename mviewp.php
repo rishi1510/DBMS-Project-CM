@@ -13,10 +13,10 @@
     <?php
     include('conn.php');
     session_start();
-    if(!isset($_SESSION['use'])) {
-        header("Location: logout.php");
+    if(!isset($_SESSION['muse'])) {
+        header("Location: logout.php?type=2");
     }
-    $user = $_SESSION['use'];
+    $user = $_SESSION['muse'];
 
     $sql1 = "SELECT M_NAME FROM MANAGER WHERE M_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
@@ -54,17 +54,17 @@
             </button>
             <div class="dropdown-content">
               <a href="#">Update account details</a>
-              <a href="logout.php">Logout</a>
+              <a href="logout.php?type=2">Logout</a>
             </div>
           </div>
           <input type="button" class="navbtn" value="&#8592" onclick="goBack()"/>
           <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
+          <a href="logout.php?type=2" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
             <a href="mhome.php">View Couriers</a>
             <a href="massign.php"  style="color: grey">View Packages</a>
-            <a href="#">Add New Courier</a>
+            <a href="mnewc.php">Add New Courier</a>
             <a href="#">Your Account</a>
         </div>
 

@@ -9,7 +9,7 @@
     include('conn.php');
     session_start();
     if(!isset($_SESSION['use'])) {
-        header("Location: logout.php");
+        header("Location: logout.php?type=0");
     }
     $user = $_SESSION['use'];
 
@@ -18,14 +18,15 @@
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['CS_NAME'];
 
-    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user' ORDER BY D_DATE";
+    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user' ORDER BY D_DATE DESC";
     $result2 = mysqli_query($con, $sql2);
     $count1 = mysqli_num_rows($result2);
 
     $sql3 = "SELECT P_CODE, CUSTOMER.CS_NAME, D_DATE, STATUS FROM PACKAGE 
              INNER JOIN CUSTOMER 
              ON CUSTOMER.CS_CODE = PACKAGE.CS_CODE 
-             WHERE RC_CODE = '$user'";
+             WHERE RC_CODE = '$user'
+             ORDER BY D_DATE DESC";
     $result3 = mysqli_query($con, $sql3);
     $count2 = mysqli_num_rows($result3);
     ?>
@@ -36,11 +37,11 @@
             </button>
             <div class="dropdown-content">
               <a href="#">Update account details</a>
-              <a href="logout.php">Logout</a>
+              <a href="logout.php?type=0">Logout</a>
             </div>
           </div>
           <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php" style="float: right"><span class="navbtn">Logout</span></a>
+          <a href="logout.php?type=0" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
             <a href="chome.php" style="color: grey">Track Packages</a>

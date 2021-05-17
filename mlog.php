@@ -7,8 +7,8 @@
 </head>
 <?php
 session_start();
-if(isset($_SESSION['use'])) {
-    header("Location: logout.php");
+if(isset($_SESSION['muse'])) {
+    header("Location: logout.php?type=2");
 }
 
 include('conn.php');
@@ -26,7 +26,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $row['M_CODE'];
 
     if ($count == 1) {
-        $_SESSION['use'] = $user;
+        $_SESSION['muse'] = $user;
         echo '<script type="text/javascript"> window.open("mhome.php","_self");</script>';
         exit;
     }
@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="clog.php">Customer Login</a>
             <a href="crlog.php">Courier Login</a>
             <a href="mlog.php" style="color: grey">Manager Login</a>
-            <a href="#">Contact Us</a>
+            <a href="contact.php">Contact Us</a>
     </div>
 
     <div class="frm">

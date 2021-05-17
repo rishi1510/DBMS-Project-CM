@@ -7,9 +7,13 @@
 </head>
 <?php
 session_start();
-if(isset($_SESSION['use'])) {
-    header("Location: logout.php");
+if(isset($_SESSION['cruse'])) {
+    header("Location: logout.php?type=1");
 }
+
+if(strcmp($pass, 'pass') == 0) {
+    header("Location: crsetpass.php");
+  }
 
 include('conn.php');
 $login = "";
@@ -26,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $row['C_CODE'];
 
     if ($count == 1) {
-        $_SESSION['use'] = $user;
+        $_SESSION['cruse'] = $user;
         echo '<script type="text/javascript"> window.open("crhome.php","_self");</script>';
         exit;
     }
@@ -56,7 +60,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="clog.php">Customer Login</a>
             <a href="crlog.php"  style="color: grey">Courier Login</a>
             <a href="mlog.php">Manager Login</a>
-            <a href="#">Contact Us</a>
+            <a href="contact.php">Contact Us</a>
     </div>
 
     <div class="frm">
