@@ -51,6 +51,7 @@
         </div>
         <div class="sidebar">
             <a href="chome.php" style="color: grey">Track Packages</a>
+            <a href="cviewdp.php">View Delivered Packages</a>
             <a href="cpack.php">Send Package</a>
             <a href="#">Your Account</a>
             <a href="#">Contact Us </a>

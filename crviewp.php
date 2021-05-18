@@ -38,12 +38,6 @@
         if(!mysqli_query($con, $sqlu)) { 
             echo "Error: " . $sqlu . "<br>" . mysqli_error($con);
         }
-        else {
-            $sqldp = "UPDATE COURIER SET P_COUNT = P_COUNT - 1 WHERE C_CODE = '$user'";
-            if(!mysqli_query($con, $sqldp)) { 
-                echo "Error: " . $sqldp . "<br>" . mysqli_error($con);
-            }
-        }
         $sub = 1;
     }
 

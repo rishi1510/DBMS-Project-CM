@@ -18,14 +18,14 @@
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['CS_NAME'];
 
-    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user' AND STATUS != 'Delivered' ORDER BY D_DATE DESC";
+    $sql2 = "SELECT * FROM PACKAGE WHERE CS_CODE='$user' AND STATUS = 'Delivered' ORDER BY D_DATE DESC";
     $result2 = mysqli_query($con, $sql2);
     $count1 = mysqli_num_rows($result2);
 
     $sql3 = "SELECT P_CODE, CUSTOMER.CS_NAME, D_DATE, STATUS FROM PACKAGE 
              INNER JOIN CUSTOMER 
              ON CUSTOMER.CS_CODE = PACKAGE.CS_CODE 
-             WHERE RC_CODE = '$user' AND STATUS != 'Delivered'
+             WHERE RC_CODE = '$user' AND STATUS = 'Delivered'
              ORDER BY D_DATE DESC";
     $result3 = mysqli_query($con, $sql3);
     $count2 = mysqli_num_rows($result3);
@@ -44,8 +44,8 @@
           <a href="logout.php?type=0" style="float: right"><span class="navbtn">Logout</span></a>
         </div>
         <div class="sidebar">
-            <a href="chome.php" style="color: grey">Track Packages</a>
-            <a href="cviewdp.php">View Delivered Packages</a>
+            <a href="chome.php">Track Packages</a>
+            <a href="cviewdp.php"  style="color: grey">View Delivered Packages</a>
             <a href="cpack.php">Send Package</a>
             <a href="#">Your Account</a>
             <a href="#">Contact Us</a>
