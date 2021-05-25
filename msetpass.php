@@ -8,15 +8,15 @@
     <?php
     include('conn.php');
     session_start();
-    if(!isset($_SESSION['cruse'])) {
+    if(!isset($_SESSION['muse'])) {
         header("Location: logout.php?type=1");
     }
-    $user = $_SESSION['cruse'];
+    $user = $_SESSION['muse'];
 
-    $sql1 = "SELECT * FROM COURIER WHERE C_CODE='$user'";
+    $sql1 = "SELECT * FROM MANAGER WHERE M_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
-    $name = $row1['C_NAME'];
+    $name = $row1['M_NAME'];
 
     $err = "Password must be at least 8 characters in length and must contain at least one number, one upper case letter and one lower case letter";
 
@@ -36,12 +36,12 @@
             $err = "Passwords do not match";
         }
         else {
-            $sql = "UPDATE COURIER SET C_PASS = '$pass1' WHERE C_CODE = '$user'";
+            $sql = "UPDATE MANAGER SET M_PASS = '$pass1' WHERE M_CODE = '$user'";
             if(!mysqli_query($con, $sql)) { 
                 echo "Error: " . $sql . "<br>" . mysqli_error($con);
             }
             else {
-                header("Location: crhome.php?type=2");
+                header("Location: mhome.php?type=4");
             }
         }
     }
@@ -57,14 +57,22 @@
         </a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="crhome.php">
+              <a class="nav-link active" aria-current="page" href="mhome.php">
+                View Couriers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="massign.php">
                 View Packages</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mnewc.php">
+                New Courier</a>
             </li>
           </ul>
 
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="logout.php?type=1">
+              <a class="nav-link" aria-current="page" href="logout.php?type=2">
               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
                   <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
@@ -74,7 +82,7 @@
           </ul>
         </div>
       </div>
-    </nav><br><br>       
+    </nav><br><br>
 
     <div class="container">
         <div class="row justify-content-md-center">

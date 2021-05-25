@@ -2,8 +2,10 @@
 <html>
     <head>
         <title>Courier Management</title>
-        <link rel = "stylesheet" type = "text/css" href = "style.css">
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">   
+       <link href="style.css" rel="stylesheet">
     </head>
+
 
     <?php
     include('conn.php');
@@ -13,56 +15,116 @@
     }
     $user = $_SESSION['muse'];
 
-    $sql1 = "SELECT M_NAME FROM MANAGER WHERE M_CODE='$user'";
+    $sql1 = "SELECT * FROM MANAGER WHERE M_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['M_NAME'];
+
+    if(strcmp($row1['M_PASS'], 'pass') == 0) {
+      header("Location: msetpass.php");
+    }
 
     $sql = "SELECT * FROM COURIER 
             WHERE B_CODE = (SELECT B_CODE FROM MANAGER
                             WHERE M_CODE = '$user')";
 
     $result = mysqli_query($con, $sql);
+    $count1 = mysqli_num_rows($result);
     ?>
     <body>
-        <div class="navbar">
-          <div class="dropdown">
-            <button class="dropbtn">&#9776;
-            </button>
-            <div class="dropdown-content">
-              <a href="#">Update account details</a>
-              <a href="logout.php?type=2">Logout</a>
-            </div>
-          </div>
-          <span class="navbtn"><?php echo $name?></span>
-          <a href="logout.php?type=2" style="float: right"><span class="navbtn">Logout</span></a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+          </svg>
+          <?php echo $name; ?>
+        </a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="mhome.php">
+                View Couriers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="massign.php">
+                View Packages</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mnewc.php">
+                New Courier</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="logout.php?type=2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                  <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                </svg>
+                Logout</a>
+            </li>
+          </ul>
         </div>
-        <div class="sidebar">
-            <a href="mhome.php" style="color: grey">View Couriers</a>
-            <a href="massign.php">View Packages</a>
-            <a href="mnewc.php">Add New Courier</a>
-            <a href="#">Your Account</a>
+      </div>
+    </nav><br><br>
+    <?php 
+      if($_GET['type'] == 1) { ?>
+
+        <div class="alert alert-success alert-dismissible fade show mx-5" role="alert">
+          <strong>Courier added successfully</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div class="d2">
-            All Couriers:<br><br>
-            <div class="d3">
+    <?php } 
+      else if($_GET['type'] == 2) { ?>
+
+        <div class="alert alert-success alert-dismissible fade show mx-5" role="alert">
+          <strong>Courier removed successfully</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <?php } 
+        else if($_GET['type'] == 3) { ?>
+
+        <div class="alert alert-success alert-dismissible fade show mx-5" role="alert">
+          <strong>Package <?php echo $_GET['pid']; ?> Assigned</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <?php } 
+        else if($_GET['type'] == 4) { ?>
+
+          <div class="alert alert-success alert-dismissible fade show mx-5" role="alert">
+            <strong>Password Set</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+  
+          <?php } ?>
+
+        <div class="container border border-3 rounded-3 p-5 bg-light">
+            <h1>All Couriers:</h1><br><br>
                 <?php 
-                     echo "<table class='table'><tr class='thead'><th>C_Code</th><th>Courier Name</th><th>Phone</th><th>Number of Packages</th></tr>";
+                if($count1 == 0) {
+                  echo "No Couriers";
+                }
+                else {
+                     echo "<table class='table table-hover text-center'><tr><th>C_Code</th><th>Courier Name</th><th>Phone</th><th>Number of Packages</th></tr>";
                 
                      while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                        $cid = $row['C_CODE'];
                        echo "<tr>";
-                       echo "<td>" . $row['C_CODE'] . "</td>";
-                       echo "<td>" . $row['C_NAME'] . "</td>";
-                       echo "<td>" . $row['C_PHONE'] . "</td>";
-                       echo "<td>" . $row['P_COUNT'] . "</td>";
+                       echo "<td><a href='mviewc.php?cid=$cid'>" . $row['C_CODE'] . "</a></td>";
+                       echo "<td><a href='mviewc.php?cid=$cid'>" . $row['C_NAME'] . "</a></td>";
+                       echo "<td><a href='mviewc.php?cid=$cid'>" . $row['C_PHONE'] . "</a></td>";
+                       echo "<td><a href='mviewc.php?cid=$cid'>" . $row['P_COUNT'] . "</a></td>";
                        echo "</tr>";
                      }
                      echo "</table>";
+                    }
                 ?>
             </div>
         </div>
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script></body>
 
 </html>

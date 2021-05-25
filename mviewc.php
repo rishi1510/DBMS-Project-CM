@@ -4,44 +4,35 @@
         <title>Courier Management</title>
        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">   
        <link href="style.css" rel="stylesheet">
-
-        <script>
-           function goBack() {
-                window.open("massign.php","_self");
-            }
-        </script>
     </head>
+
     <?php
     include('conn.php');
     session_start();
     if(!isset($_SESSION['muse'])) {
         header("Location: logout.php?type=2");
     }
+    
+
     $user = $_SESSION['muse'];
 
-    $sql1 = "SELECT M_NAME FROM MANAGER WHERE M_CODE='$user'";
+    $sql1 = "SELECT * FROM MANAGER WHERE M_CODE='$user'";
     $res1 = mysqli_query($con, $sql1);
     $row1 = mysqli_fetch_array($res1, MYSQLI_ASSOC);
     $name = $row1['M_NAME'];
-    $code = $_GET['pid'];
-    
+
+    $code = $_GET['cid'];
     $sub = 0;
 
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $cr_code = $_POST['cr_code'];
-        $sqlu = "UPDATE PACKAGE SET STATUS = 'Courier Assigned', D_DATE = CURRENT_DATE()+5, C_CODE = '$cr_code' WHERE P_CODE = '$code'";
-        if(!mysqli_query($con, $sqlu)) { 
-            echo "Error: " . $sqlu . "<br>" . mysqli_error($con);
-        }
-        else {
-          header("Location: mhome.php?type=3&pid=$code");
-        }
-    }
-
-    $sql = "SELECT * FROM PACKAGE WHERE P_CODE = '$code'";
+    $sql = "SELECT * FROM COURIER WHERE C_CODE = '$code'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $status = $row['STATUS'];
+
+    $bcode = $row['B_CODE'];
+    $sqlb = "SELECT B_NAME FROM BRANCH WHERE B_CODE = '$bcode'";
+    $resb = mysqli_query($con, $sqlb);
+    $rowb = mysqli_fetch_array($resb, MYSQLI_ASSOC);
+    $branch  = $rowb['B_NAME'];
 
     ?>
     <body>
@@ -54,19 +45,19 @@
           <?php echo $name; ?>
         </a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="massign.php">
-              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-              </svg>
-            </a>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="mhome.php">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                  </svg>
+                </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="mhome.php">
+              <a class="nav-link active" aria-current="page" href="mhome.php">
                 View Couriers</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="massign.php">
+              <a class="nav-link" aria-current="page" href="massign.php">
                 View Packages</a>
             </li>
             <li class="nav-item">
@@ -90,71 +81,50 @@
     </nav><br><br>
 
         <div class="container border border-3 rounded-3 p-5 bg-light">
-        <h1>Package details:</h1><br>
-        <?php 
-            if((strcmp($status, 'Processing Request') == 0) && ($sub == 0)) {
-                echo "<form method='POST' style='font-size:20px'>";
-                echo "<label for='cr_code'>Assign Courier:  </label><br><br>";
-                echo "<select name='cr_code' id='cr_code' required><option value=''></option>";
-                $sqlc = "SELECT * FROM COURIER 
-                        WHERE B_CODE = (SELECT B_CODE FROM MANAGER WHERE M_CODE = '$user')";
-                $resc = mysqli_query($con, $sqlc);
-                while($crow = mysqli_fetch_array($resc, MYSQLI_ASSOC)) {
-                    echo "<option value='". $crow['C_CODE']. "'>". $crow['C_CODE']. " - " . $crow['C_NAME'] ."</option>";
-                }
-                echo "</select>";
-                echo "<input type='submit' class='btn btn-primary float-end' value='Assign'/>";
-                echo "</form><br><hr>";
-            }
-        ?>
+        <h1>Courier details:</h1><br>
               <table class="table" cellspacing="20px">
-              <tr>
-              <th>Package Code:</th>
-              <td><?php echo $row['P_CODE'];?></td>
-              </tr>
               <tr>
               <th>Courier Code:</th>
               <td><?php echo $row['C_CODE'];?></td>
               </tr>
               <tr>
-              <th>To:</th>
-              <td><?php echo $row['TO_NAME'];?></td>
+              <th>Name:</th>
+              <td><?php echo $row['C_NAME'];?></td>
               </tr>
               <tr>
-              <th>Address:</th>
-              <td><?php echo $row['TO_ADDRESS'];?></td>
+              <th>Phone:</th>
+              <td><?php echo $row['C_PHONE'];?></td>
               </tr>
               <tr>
-              <th>City:</th>
-              <td><?php echo $row['TO_CITY'];?></td>
+              <th>Email:</th>
+              <td><?php echo $row['C_EMAIL'];?></td>
               </tr>
               <tr>
-              <th>Pin code:</th>
-              <td><?php echo $row['TO_PIN'];?></td>
+              <th>Branch:</th>
+              <td><?php 
+                echo $branch;?></td>
               </tr>
               <tr>
-              <th>Phone Number:</th>
-              <td><?php echo $row['TO_PHONE'];?></td>
+              <th>Active Package Count:</th>
+              <td><?php echo $row['P_COUNT'];?></td>
               </tr>
               <tr>
-              <th>Contents:</th>
-              <td><?php echo $row['P_CONTENTS'];?></td>
+              <th>Delivered Packages:</th>
+              <td><?php echo $row['D_COUNT'];?></td>
               </tr>
-              <tr>
-              <th>Weight:</th>
-              <td><?php echo $row['P_WEIGHT'];?> kg</td>
-              </tr>
-              <tr>
-              <th>Status:</th>
-              <td><?php echo $row['STATUS'];?></td>
-              </tr>
-              <tr>
-              <th>Comments:</th>
-              <td><?php echo $row['COMMENTS'];?></td>
-              </tr>
-              </table>
-        </div><br><br>
-        
+              </table><br>
+              <input type="button" class="btn btn-primary float-end" value="Remove Courier" onclick = "delCourier()"/><br>
+        </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script></body>
+    <script>
+           function goBack() {
+                window.open("mhome.php","_self");
+            }
+
+            function delCourier() {
+                <?php echo "window.open('mdelc.php?cid=$code','_self');"; ?>
+            }
+        </script>
+
 
 </html>

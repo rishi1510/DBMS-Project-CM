@@ -5,13 +5,41 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">   <link href="style.css" rel="stylesheet">
 
 </head>
+
 <?php
+session_start();
+if(isset($_SESSION['ause'])) {
+    header("Location: ahome.php");
+}
+
 include('conn.php');
+$login = "";
+$email = "";
+$username="";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $pass = $_POST['pass'];
+
+    $sql = "SELECT * FROM ADMIN WHERE A_USER='$username' AND A_PASS='$pass'";
+    $result = mysqli_query($con, $sql);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $count = mysqli_num_rows($result);
+    $user = $row['A_CODE'];
+
+    if ($count == 1) {
+        $_SESSION['ause'] = $user;
+        echo '<script type="text/javascript"> window.open("ahome.php","_self");</script>';
+        exit;
+    }
+    else {
+        $login =  "Username or Password is invalid";
+    }
+}
 ?>
 
 <body>
-    
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
@@ -41,7 +69,7 @@ include('conn.php');
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="contact.php">Contact Us</a>
+              <a class="nav-link" aria-current="page" href="contact.php">Contact Us</a>
             </li>
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -63,28 +91,29 @@ include('conn.php');
           </ul>
         </div>
       </div>
-    </nav><br><br>
+    </nav>
+    <br><br><br>
 
-    <div class="container" style="opacity: 0.7">
+    <div class="container">
         <div class="row justify-content-md-center">
-            <div class="col-md-8 p-5 border rounded border-3 bg-light">
-              <h2 class="text-center"><u>Contact Us
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor" class="bi bi-headset text-primary" viewBox="0 0 16 16">
-                <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
-              </svg>
-              </u></h2>
-                <br>
-                <?php
-                    $sqlb = "SELECT * FROM BRANCH";
-                    $resb = mysqli_query($con, $sqlb);
-                    while($row = mysqli_fetch_array($resb)) {
-                        echo "<h4>" . $row['B_NAME'] . "</h4>" . $row['B_ADDRESS'] . "<br>" . $row['B_CITY'] . " - " . $row['B_PIN'] . "<br>Phone Number: " . $row['B_PHONE'];
-                        echo "<br><br>";
-                    }
-                    ?>
-            </div>
-          </div>
-        </div><br><br>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-</body>
-</html>
+            <div class="col-md-5 p-5 border rounded border-3 bg-light">
+        <h1 class="text-center">Admin Login</h1><br>
+    <form name="f1" action="<?php
+    echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+        Username:<br><input type="text" name="username" id="username" value="<?php echo $username;?>"/><br><br>
+        Password:<br><input type="password" name="pass" id="pass"/><br><br>
+        <input type="submit" class="btn btn-primary float-end" name="Login" value="Login"/><br>
+    </form>
+    <br>
+    <?php
+    if($login != "") {
+        echo '<div class="text-danger">';
+        echo $login;
+        echo '</div>';
+    }
+    else {
+        echo '<br>';
+    }?>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script></body>
+

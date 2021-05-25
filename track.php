@@ -1,17 +1,45 @@
 <!doctype html>
-<html>
-<head>
-    <title>Courier Management</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">   <link href="style.css" rel="stylesheet">
-
-</head>
-<?php
-include('conn.php');
-?>
-
-<body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">   <link href="style.css" rel="stylesheet">
     
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <?php 
+        include('conn.php');
+
+        $err = "";
+        $f = 0;
+
+        if($_SERVER["REQUEST_METHOD"] == "POST") {
+            $code = $_POST['code'];
+
+            $pattern = '/^[0-9]*$/';
+            if(preg_match($pattern, $code) == 0) {
+                $err = "Invalid code";
+            } 
+            else {
+                $sql = "SELECT * FROM PACKAGE WHERE P_CODE = '$code'";
+                $result = mysqli_query($con, $sql);
+                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                $count = mysqli_num_rows($result);
+
+                if($count == 0) {
+                    $err = "Invalid code";
+                }
+                else {
+                    $f = 1;
+                }
+            }
+            
+        }
+    ?>
+        
+    <title>Courier Management</title>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
@@ -24,7 +52,7 @@ include('conn.php');
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="index.html">Home</a>
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,13 +64,14 @@ include('conn.php');
                 <li><a class="dropdown-item" href="alog.php">Admin Login</a></li>
               </ul>
               
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="track.php">Track Package</a>
             </li>
-
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="contact.php">Contact Us</a>
+              <a class="nav-link active" aria-current="page" href="track.php">Track Package</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="contact.php">Contact Us</a>
+            </li>
+  
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -63,28 +92,47 @@ include('conn.php');
           </ul>
         </div>
       </div>
-    </nav><br><br>
+    </nav><br><br><br>
 
-    <div class="container" style="opacity: 0.7">
+    <div class="container">
         <div class="row justify-content-md-center">
-            <div class="col-md-8 p-5 border rounded border-3 bg-light">
-              <h2 class="text-center"><u>Contact Us
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor" class="bi bi-headset text-primary" viewBox="0 0 16 16">
-                <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
-              </svg>
-              </u></h2>
-                <br>
-                <?php
-                    $sqlb = "SELECT * FROM BRANCH";
-                    $resb = mysqli_query($con, $sqlb);
-                    while($row = mysqli_fetch_array($resb)) {
-                        echo "<h4>" . $row['B_NAME'] . "</h4>" . $row['B_ADDRESS'] . "<br>" . $row['B_CITY'] . " - " . $row['B_PIN'] . "<br>Phone Number: " . $row['B_PHONE'];
-                        echo "<br><br>";
-                    }
-                    ?>
+            <div class="col-md-5 p-5 border rounded border-3 bg-light text-center">
+            <h1 class="text-center">Track Package</h1><br>
+            <form name="f1" action="<?php
+                echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                Package Code:  <input type="text" name="code" id="code" value="<?php echo $code; ?>" required maxlength="5" size="10"/><br><br><br>
+            <input type="submit" class="btn btn-primary float-end" name="track" value="Track"/><br>
+            </form>
+            <br>
+            <?php
+                echo '<div class="text-danger">';
+                echo $err;
+                echo '</div>';
+            ?>
             </div>
-          </div>
-        </div><br><br>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-</body>
+        </div>
+    </div><br><br>
+
+    <?php 
+        if($f == 1) { ?>
+             <div class="container border border-3 rounded-3 p-5 bg-light">
+              <?php 
+                echo "<table class='table table-hover text-center'><tr><th>P_Code</th><th>Delivery Date</th><th>Status</th></tr>";
+                echo "<tr>";
+                echo "<td>" . $row['P_CODE'] . "</td>";
+                $date = "  -  ";
+                if(isset($row['C_CODE'])) {
+                    $date = date('d-m-Y', strtotime($row['D_DATE']));
+
+                }
+                echo "<td>$date</td>";
+                echo "<td>" . $row['STATUS'] . "</td>";
+                echo "</tr>";
+                echo "</table>";
+              ?>
+            </div>
+    <?php    }  ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+  </body>
 </html>
