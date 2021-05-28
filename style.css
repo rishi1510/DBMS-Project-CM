@@ -17,11 +17,10 @@ td a{
 
  .bg {
     background-image: url('delivery5.jpg');
-    height: 450px; 
+    height: 700px; 
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover; 
-    opacity: 0.8;
  }
 
 
